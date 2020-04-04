@@ -1,6 +1,6 @@
 <?php
 	
-	$arr = new SplFixedArray(1001);
+	$arr = new SplFixedArray(101);
 	$prime = [];
 
 	function seive($N, &$arr, &$prime){
@@ -27,10 +27,10 @@
 		}
 	}
 
-	seive(1000, $arr, $prime);
+	// seive(1000, $arr, $prime);
 
-	for ($i=0; $i < count($prime) ; $i++) { 
-		echo $prime[$i] . '<br/>';
-	}
+	// for ($i=0; $i < count($prime) ; $i++) { 
+	// 	echo $prime[$i] . '<br/>';
+	// }
 
 ?>
