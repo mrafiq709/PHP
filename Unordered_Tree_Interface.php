@@ -14,7 +14,7 @@ class Node{
     public $name;
     public $children;
 
-    function __construct($i, $pId = 0, $n, $child = false){
+    function __construct($i, $pId, $n, $child = 0){
 
         $this->id = $i;
         $this->parent_id = $pId;
@@ -26,6 +26,7 @@ class Node{
 class Tree implements TreeInterface{
 
     private $initializeTree;
+    private $singleNode;
 
     public function init(array $array, $parent_id = 0)
     {
@@ -57,12 +58,42 @@ class Tree implements TreeInterface{
 
     public function getParent($id)
     {
-        
+        $this->getNode($id);
+
+        if($this->singleNode->parent_id === 0)
+            echo 'Parent: 0' . '<br/>';
+        else
+        {
+            $this->getNode($this->singleNode->parent_id);
+            echo 'Parent: ' . $this->singleNode->name . '<br/>';
+        }
+
     }
 
     public function toString()
     {
         echo json_encode($this->initializeTree, JSON_PRETTY_PRINT);
+    }
+
+    private function getNodeRecursion($array, $id){
+        
+        foreach($array as $key => $value){
+
+            if($value->id === $id)
+            {
+                $this->singleNode = new Node(
+                    $value->id,
+                    $value->parent_id,
+                    $value->name,
+                    $value->children == 0 ? 0 : 1
+                );
+                return;
+            }
+            //If $value is an array.
+            else if(is_array($value->children)){
+                $this->getNodeRecursion($value->children, $id);
+            }
+        }
     }
 
     private function getNodesRecursion(array $arr, $id)
@@ -72,27 +103,6 @@ class Tree implements TreeInterface{
             if($element->id == $id)
             {
                 echo json_encode($element, JSON_PRETTY_PRINT);
-                return;
-            }
-            else if($element->children)
-            {
-                $this->getNodesRecursion($element->children, $id);
-            }
-        }
-    }
-
-    private function getNodeRecursion(array $arr, $id)
-    {
-        foreach($arr as $element)
-        {
-            if($element->id == $id)
-            {
-                echo json_encode(new Node(
-                    $element->id, 
-                    $element->parent_id, 
-                    $element->name,
-                    $element->children == true ? true : false
-                ), JSON_PRETTY_PRINT);
                 return;
             }
             else if($element->children)
@@ -115,9 +125,11 @@ $tree = new Tree();
 
 $tree->init($nodes);
 
-//$tree->getNode(3);
+//$tree->getNode(2);
 
-//$tree->getNodes(1);
+//$tree->getNodes(2);
+
+//$tree->getParent(1);
 
 $tree->toString();
 
