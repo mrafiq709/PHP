@@ -1,2 +1,1 @@
-# PHP
-Practice PHP OOP
+# SOLID-Coding-Pronciples
